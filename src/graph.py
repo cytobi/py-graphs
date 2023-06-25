@@ -80,7 +80,7 @@ class Node:
         debug("Ending drag...")
         dx = event.x - self.drag_start_x
         dy = event.y - self.drag_start_y
-        tx, ty = window.canvas_to_unitsquare_direction(dx, dy)
+        tx, ty = window.canvas_to_unitsquare_coords(dx, dy, direction=True)
         self.x += tx
         self.y += ty
         window.update_graph()
