@@ -67,9 +67,13 @@ class Node:
     def draw(self, window, radius=20):
         canvas_x, canvas_y = window.unitsquare_to_canvas_coords(self.x, self.y)
         circle = window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill="white")
-        window.canvas.tag_bind(circle, "<ButtonPress-1>", self.on_drag_start)
-        window.canvas.tag_bind(circle, "<ButtonRelease-1>", lambda event: self.on_drag_end(event, window))
-        window.canvas.create_text(canvas_x, canvas_y, text=self.name)
+        self.bind_drag(window, circle)
+        label = window.canvas.create_text(canvas_x, canvas_y, text=self.name)
+        self.bind_drag(window, label) # bind drag to label as well
+
+    def bind_drag(self, window, bind_to):
+        window.canvas.tag_bind(bind_to, "<ButtonPress-1>", self.on_drag_start)
+        window.canvas.tag_bind(bind_to, "<ButtonRelease-1>", lambda event: self.on_drag_end(event, window))
 
     def on_drag_start(self, event):
         debug("Starting drag...")
