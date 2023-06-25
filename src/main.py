@@ -2,7 +2,7 @@ import networkx as nx
 
 from window import Window
 from graph import Graph
-from debug import debug
+from debug import setup_debug, debug
 
 
 # global variables
@@ -12,6 +12,8 @@ current_graph = None
 # main function
 def main():
     global current_graph
+
+    setup_debug()
 
     debug("Starting...")
 
