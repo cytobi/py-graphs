@@ -72,4 +72,28 @@ class Window:
         canvas_height = self.canvas.winfo_height()
         smaller_dimension = min(canvas_width, canvas_height)
         sd_without_padding = smaller_dimension - 2*self.canvas_padding
-        return canvas_width/2 + x*sd_without_padding/2, canvas_height/2 - y*sd_without_padding/2
+        return canvas_width/2 + x*sd_without_padding/2, canvas_height/2 + y*sd_without_padding/2
+    
+    # helper to convert coordinates from the canvas of this window to the unit square
+    def canvas_to_unitsquare_coords(self, x, y):
+        canvas_width = self.canvas.winfo_width()
+        canvas_height = self.canvas.winfo_height()
+        smaller_dimension = min(canvas_width, canvas_height)
+        sd_without_padding = smaller_dimension - 2*self.canvas_padding
+        return (x - canvas_width/2)/(sd_without_padding/2), (y - canvas_height/2)/(sd_without_padding/2)
+    
+    # helper to convert directions from the unit square to the canvas of this window
+    def unitsquare_to_canvas_direction(self, x, y):
+        canvas_width = self.canvas.winfo_width()
+        canvas_height = self.canvas.winfo_height()
+        smaller_dimension = min(canvas_width, canvas_height)
+        sd_without_padding = smaller_dimension - 2*self.canvas_padding
+        return x*sd_without_padding/2, y*sd_without_padding/2
+    
+    # helper to convert directions from the canvas of this window to the unit square
+    def canvas_to_unitsquare_direction(self, x, y):
+        canvas_width = self.canvas.winfo_width()
+        canvas_height = self.canvas.winfo_height()
+        smaller_dimension = min(canvas_width, canvas_height)
+        sd_without_padding = smaller_dimension - 2*self.canvas_padding
+        return x/(sd_without_padding/2), y/(sd_without_padding/2)

@@ -66,9 +66,24 @@ class Node:
 
     def draw(self, window, radius=20):
         canvas_x, canvas_y = window.unitsquare_to_canvas_coords(self.x, self.y)
-        window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill="white")
+        circle = window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill="white")
+        window.canvas.tag_bind(circle, "<ButtonPress-1>", self.on_drag_start)
+        window.canvas.tag_bind(circle, "<ButtonRelease-1>", lambda event: self.on_drag_end(event, window))
         window.canvas.create_text(canvas_x, canvas_y, text=self.name)
 
+    def on_drag_start(self, event):
+        debug("Starting drag...")
+        self.drag_start_x = event.x
+        self.drag_start_y = event.y
+
+    def on_drag_end(self, event, window):
+        debug("Ending drag...")
+        dx = event.x - self.drag_start_x
+        dy = event.y - self.drag_start_y
+        tx, ty = window.canvas_to_unitsquare_direction(dx, dy)
+        self.x += tx
+        self.y += ty
+        window.update_graph()
 
 # represents an edge between two nodes
 class Edge:
