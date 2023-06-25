@@ -1,5 +1,5 @@
-import tkinter as tk
-import webbrowser
+import tkinter as tk # gui library
+import webbrowser # open links in browser
 import random
 
 from debug import debug
@@ -7,29 +7,31 @@ from graph import Graph
 
 
 class Window:
-    root = None
-    canvas = None
-    menu = None
-    sidebar = None
+    root = None # root window
+    canvas = None # canvas to draw on
+    menu = None # menu bar
+    sidebar = None # sidebar to display properties of the graph
     current_graph = None
-    canvas_padding = 20
+    canvas_padding = 20 # padding around the canvas
 
     def __init__(self, title, width, height, canvas_padding=25):
         debug("Creating window...")
         self.canvas_padding = canvas_padding
-
+        # create root window
         self.root = tk.Tk()
         self.root.title(title)
         self.root.geometry(str(width) + "x" + str(height))
-
+        # create menu bar
         self.menu = tk.Menu(self.root)
         self.root.config(menu=self.menu)
         self.create_menu()
+        # create canvas
         self.canvas = tk.Canvas(self.root, width=width, height=height)
         self.canvas.pack()
-
+        # update root window
         self.root.update()
 
+    # definition of the menu bar
     def create_menu(self):
         new_graph_menu = tk.Menu(self.menu)
         new_graph_menu.add_command(label="Complete Graph", command=self.new_complete_graph)
@@ -40,24 +42,26 @@ class Window:
 
     def about(self):
         webbrowser.open("https://github.com/cytobi/py-graphs")
-        
+
+    def set_current_graph(self, graph):
+        self.current_graph = graph
+
+    def update_graph(self):
+        self.canvas.delete("all")
+        self.current_graph.draw(self)
+
+    # displays the window, must be called at the end of the main function
+    def display(self):
+        debug("Displaying window...")
+        self.root.mainloop()
+
     def new_complete_graph(self):
         debug("Creating new complete graph...")
         self.current_graph = Graph.new_complete_graph(random.randint(3, 10))
         self.update_graph()
 
-    def  update_graph(self):
-        self.canvas.delete("all")
-        self.current_graph.draw(self)
-
-    def set_current_graph(self, graph):
-        self.current_graph = graph
-
-    def display(self):
-        debug("Displaying window...")
-        self.root.mainloop()
-
-    def unitcircle_to_canvas_coords(self, x, y):
+    # helper to convert coordinates from the unit square to the canvas of this window
+    def unitsquare_to_canvas_coords(self, x, y):
         canvas_width = self.canvas.winfo_width()
         canvas_height = self.canvas.winfo_height()
         smaller_dimension = min(canvas_width, canvas_height)

@@ -1,5 +1,3 @@
-import networkx as nx
-
 from window import Window
 from graph import Graph
 from debug import setup_debug, debug
@@ -16,7 +14,7 @@ def main():
 
     # setup graph
     debug("Setting up default graph...")
-    default_graph = Graph(nx.complete_graph(5))
+    default_graph = Graph.new_complete_graph(5)
     window.set_current_graph(default_graph)
 
     # draw graph
