@@ -28,7 +28,7 @@ class Window:
         self.create_menu()
         # create canvas
         self.canvas = tk.Canvas(self.root, width=width, height=height)
-        self.canvas.pack()
+        self.canvas.pack(expand=True, fill=tk.BOTH)
         # register event handlers
         self.root.bind_all("<MouseWheel>", self.zoom_canvas) # windows
         self.root.bind_all("<Button-4>", self.zoom_canvas) # linux
