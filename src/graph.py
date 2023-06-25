@@ -1,6 +1,4 @@
 import networkx as nx
-import tkinter as tk
-from window import Window
 
 class Graph:
     nx_graph = None

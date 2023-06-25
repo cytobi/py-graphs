@@ -1,5 +1,4 @@
 import networkx as nx
-import tkinter as tk
 
 from window import Window
 from graph import Graph
