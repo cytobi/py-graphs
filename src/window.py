@@ -11,13 +11,17 @@ class Window:
     root = None # root window
     canvas = None # canvas to draw on
     menu = None # menu bar
-    sidebar = None # sidebar to display properties of the graph
-    current_graph = None
+    sidebar = None # sidebar to display properties of the graph#
+
     canvas_padding = 20 # padding around the canvas
     zoom = 1 # zoom factor
+
+    current_graph = None
+
     drag_canvas = False # whether the canvas is being dragged (and not a node)
     drag_start_x = 0 # x coordinate of the start of a canvas drag
     drag_start_y = 0 # y coordinate of the start of a canvas drag
+
 
     def __init__(self, title, width, height, canvas_padding=25):
         debug("Creating window...")
@@ -55,6 +59,8 @@ class Window:
     def about(self):
         webbrowser.open("https://github.com/cytobi/py-graphs")
 
+
+    # graph handling
     def set_current_graph(self, graph):
         self.current_graph = graph
 
@@ -72,11 +78,15 @@ class Window:
         debug("Displaying window...")
         self.root.mainloop()
 
+
+    # new graphs
     def new_complete_graph(self):
         debug("Creating new complete graph...")
         self.current_graph = Graph.new_complete_graph(random.randint(3, 10))
         self.update_graph()
 
+
+    # event handlers
     # event handler for zooming the canvas
     def zoom_canvas(self, event, invert=False):
         debug("Zooming canvas...")
@@ -113,7 +123,10 @@ class Window:
             node.x += tx
             node.y += ty
         self.update_graph()
+        self.drag_canvas = False
 
+
+    # helpers
     # helper to convert coordinates and directions from the unit square to the canvas of this window
     def unitsquare_to_canvas_coords(self, x, y, direction=False):
         canvas_width = self.canvas.winfo_width()
