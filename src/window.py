@@ -70,6 +70,7 @@ class Window:
 
     def reset_graph(self):
         debug("Resetting graph...")
+        self.zoom = 1 # reset zoom
         self.current_graph.spring_layout()
         self.update_graph()
 
