@@ -1,4 +1,5 @@
 import networkx as nx
+from debug import debug
 
 class Graph:
     nx_graph = None
@@ -8,6 +9,7 @@ class Graph:
     properties = {}
 
     def __init__(self, nx_graph):
+        debug("Initializing graph...")
         self.nx_graph = nx_graph
         self.pos = nx.spring_layout(nx_graph)
         for node in nx_graph.nodes():
@@ -34,6 +36,7 @@ class Graph:
             node.y = self.pos[node.name][1]
 
     def draw(self, window):
+        debug("Drawing graph...")
         for edge in self.edges:
             edge.draw(window)
         for node in self.nodes:

@@ -1,4 +1,5 @@
 import tkinter as tk
+from debug import debug
 
 class Window:
     root = None
@@ -8,6 +9,7 @@ class Window:
     canvas_padding = 20
 
     def __init__(self, title, width, height, canvas_padding=25):
+        debug("Creating window...")
         self.canvas_padding = canvas_padding
 
         self.root = tk.Tk()
@@ -26,6 +28,7 @@ class Window:
         self.menu.add_command(label="Exit", command=self.root.quit)
 
     def display(self):
+        debug("Displaying window...")
         self.root.mainloop()
 
     def unitcircle_to_canvas_coords(self, x, y):

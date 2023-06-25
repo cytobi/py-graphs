@@ -2,14 +2,11 @@ import networkx as nx
 
 from window import Window
 from graph import Graph
+from debug import debug
+
 
 # global variables
 current_graph = None
-
-# helper functions
-def debug(to_print):
-    if __debug__:
-        print(to_print)
 
 
 # main function
@@ -18,8 +15,7 @@ def main():
 
     debug("Starting...")
 
-    # setup tkinter
-    debug("Starting GUI...")
+    # setup window
     window = Window("Graph Visualizer", 800, 600)
 
     # setup graph
@@ -30,8 +26,7 @@ def main():
     # draw graph
     current_graph.draw(window)
 
-    # display tkinter
-    debug("Displaying GUI...")
+    # display window
     window.display()
 
 
