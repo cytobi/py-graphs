@@ -13,6 +13,7 @@ class Window:
     sidebar = None # sidebar to display properties of the graph
     current_graph = None
     canvas_padding = 20 # padding around the canvas
+    zoom = 1 # zoom factor
 
     def __init__(self, title, width, height, canvas_padding=25):
         debug("Creating window...")
@@ -72,10 +73,11 @@ class Window:
         canvas_height = self.canvas.winfo_height()
         smaller_dimension = min(canvas_width, canvas_height)
         sd_without_padding = smaller_dimension - 2*self.canvas_padding
+        zoomed_half = sd_without_padding/2*self.zoom
         if direction:
-            return x*sd_without_padding/2, y*sd_without_padding/2
+            return x*zoomed_half, y*zoomed_half
         else:
-            return canvas_width/2 + x*sd_without_padding/2, canvas_height/2 + y*sd_without_padding/2
+            return canvas_width/2 + x*zoomed_half, canvas_height/2 + y*zoomed_half
     
     # helper to convert coordinates and directions from the canvas of this window to the unit square
     def canvas_to_unitsquare_coords(self, x, y, direction=False):
@@ -83,7 +85,8 @@ class Window:
         canvas_height = self.canvas.winfo_height()
         smaller_dimension = min(canvas_width, canvas_height)
         sd_without_padding = smaller_dimension - 2*self.canvas_padding
+        zoomed_half = sd_without_padding/2*self.zoom
         if direction:
-            return x/(sd_without_padding/2), y/(sd_without_padding/2)
+            return x/zoomed_half, y/zoomed_half
         else:
-            return (x - canvas_width/2)/(sd_without_padding/2), (y - canvas_height/2)/(sd_without_padding/2)
+            return (x - canvas_width/2)/zoomed_half, (y - canvas_height/2)/zoomed_half
