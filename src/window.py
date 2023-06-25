@@ -1,6 +1,7 @@
 import tkinter as tk # gui library
 import webbrowser # open links in browser
 import random
+import math
 
 from debug import debug
 from graph import Graph
@@ -14,6 +15,7 @@ class Window:
     current_graph = None
     canvas_padding = 20 # padding around the canvas
     zoom = 1 # zoom factor
+    drag_canvas = False # whether the canvas is being dragged (and not a node)
     drag_start_x = 0 # x coordinate of the start of a canvas drag
     drag_start_y = 0 # y coordinate of the start of a canvas drag
 
@@ -86,11 +88,22 @@ class Window:
 
     # event handlers for dragging the canvas
     def drag_canvas_start(self, event):
-        debug("Starting canvas drag...")
-        self.drag_start_x = event.x
-        self.drag_start_y = event.y
+        # check if a node was clicked, slow/cumbersome implementation, maybe different tools?
+        drag_canvas = True
+        for node in self.current_graph.nodes:
+            canvas_x, canvas_y = self.unitsquare_to_canvas_coords(node.x, node.y)
+            if math.dist((canvas_x, canvas_y), (event.x, event.y)) < node.radius:
+                drag_canvas = False
+                break
+        self.drag_canvas = drag_canvas
+        if self.drag_canvas:
+            debug("Starting canvas drag...")
+            self.drag_start_x = event.x
+            self.drag_start_y = event.y
 
     def drag_canvas_end(self, event):
+        if not self.drag_canvas:
+            return
         debug("Ending canvas drag...")
         dx = event.x - self.drag_start_x
         dy = event.y - self.drag_start_y

@@ -58,6 +58,7 @@ class Node:
     name = ""
     x = 0
     y = 0
+    radius = 20 # last radius used to draw the node
 
     def __init__(self, name, x, y):
         self.name = name
@@ -65,6 +66,7 @@ class Node:
         self.y = y
 
     def draw(self, window, radius=20):
+        self.radius = radius
         canvas_x, canvas_y = window.unitsquare_to_canvas_coords(self.x, self.y)
         circle = window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill="white")
         self.bind_drag(window, circle)
