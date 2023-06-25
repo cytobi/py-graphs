@@ -29,6 +29,10 @@ class Window:
         # create canvas
         self.canvas = tk.Canvas(self.root, width=width, height=height)
         self.canvas.pack()
+        # register event handlers
+        self.root.bind_all("<MouseWheel>", self.zoom_canvas) # windows
+        self.root.bind_all("<Button-4>", self.zoom_canvas) # linux
+        self.root.bind_all("<Button-5>", lambda event: self.zoom_canvas(event, invert=True)) # linux
         # update root window
         self.root.update()
 
@@ -65,6 +69,15 @@ class Window:
     def new_complete_graph(self):
         debug("Creating new complete graph...")
         self.current_graph = Graph.new_complete_graph(random.randint(3, 10))
+        self.update_graph()
+
+    # event handler for zooming the canvas
+    def zoom_canvas(self, event, invert=False):
+        debug("Zooming canvas...")
+        if (event.delta > 0) ^ (not invert):
+            self.zoom *= 1.1
+        else:
+            self.zoom /= 1.1
         self.update_graph()
 
     # helper to convert coordinates and directions from the unit square to the canvas of this window
