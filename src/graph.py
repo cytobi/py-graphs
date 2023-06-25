@@ -56,6 +56,7 @@ class Node:
     def draw(self, window, radius=20):
         canvas_x, canvas_y = window.unitcircle_to_canvas_coords(self.x, self.y)
         window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill="white")
+        window.canvas.create_text(canvas_x, canvas_y, text=self.name)
 
 
 
@@ -64,7 +65,7 @@ class Edge:
     node2 = None
     weight = None
 
-    def __init__(self, node1, node2, weight=0):
+    def __init__(self, node1, node2, weight=None):
         self.node1 = node1
         self.node2 = node2
         self.weight = weight
@@ -73,3 +74,5 @@ class Edge:
         canvas_x1, canvas_y1 = window.unitcircle_to_canvas_coords(self.node1.x, self.node1.y)
         canvas_x2, canvas_y2 = window.unitcircle_to_canvas_coords(self.node2.x, self.node2.y)
         window.canvas.create_line(canvas_x1, canvas_y1, canvas_x2, canvas_y2)
+        if self.weight is not None:
+            window.canvas.create_text((canvas_x1+canvas_x2)/2, (canvas_y1+canvas_y2)/2, text=self.weight)
