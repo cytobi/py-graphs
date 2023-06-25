@@ -78,12 +78,12 @@ class Node:
         window.canvas.tag_bind(bind_to, "<ButtonRelease-1>", lambda event: self.on_drag_end(event, window))
 
     def on_drag_start(self, event):
-        debug("Starting drag...")
+        debug("Starting node drag...")
         self.drag_start_x = event.x
         self.drag_start_y = event.y
 
     def on_drag_end(self, event, window):
-        debug("Ending drag...")
+        debug("Ending node drag...")
         dx = event.x - self.drag_start_x
         dy = event.y - self.drag_start_y
         tx, ty = window.canvas_to_unitsquare_coords(dx, dy, direction=True)
