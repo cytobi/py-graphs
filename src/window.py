@@ -37,6 +37,7 @@ class Window:
         new_graph_menu.add_command(label="Complete Graph", command=self.new_complete_graph)
 
         self.menu.add_cascade(label="New", menu=new_graph_menu)
+        self.menu.add_command(label="Reset", command=self.reset_graph)
         self.menu.add_command(label="About", command=self.about)
         self.menu.add_command(label="Exit", command=self.root.quit)
 
@@ -49,6 +50,11 @@ class Window:
     def update_graph(self):
         self.canvas.delete("all")
         self.current_graph.draw(self)
+
+    def reset_graph(self):
+        debug("Resetting graph...")
+        self.current_graph.spring_layout()
+        self.update_graph()
 
     # displays the window, must be called at the end of the main function
     def display(self):
