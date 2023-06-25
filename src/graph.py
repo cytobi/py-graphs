@@ -12,8 +12,10 @@ class Graph:
         debug("Initializing graph...")
         self.nx_graph = nx_graph
         self.pos = nx.spring_layout(nx_graph)
+        self.nodes = []
         for node in nx_graph.nodes():
             self.nodes.append(Node(node, self.pos[node][0], self.pos[node][1]))
+        self.edges = []
         for edge in nx_graph.edges():
             self.edges.append(Edge(self.get_node(edge[0]), self.get_node(edge[1])))
 
@@ -41,6 +43,10 @@ class Graph:
             edge.draw(window)
         for node in self.nodes:
             node.draw(window)
+
+    @staticmethod
+    def new_complete_graph(n):
+        return Graph(nx.complete_graph(n))
 
 
 class Node:

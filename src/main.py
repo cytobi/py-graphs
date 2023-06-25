@@ -5,14 +5,8 @@ from graph import Graph
 from debug import setup_debug, debug
 
 
-# global variables
-current_graph = None
-
-
 # main function
 def main():
-    global current_graph
-
     setup_debug()
 
     debug("Starting...")
@@ -23,10 +17,10 @@ def main():
     # setup graph
     debug("Setting up default graph...")
     default_graph = Graph(nx.complete_graph(5))
-    current_graph = default_graph
+    window.set_current_graph(default_graph)
 
     # draw graph
-    current_graph.draw(window)
+    window.update_graph()
 
     # display window
     window.display()

@@ -1,13 +1,17 @@
 import tkinter as tk
 import webbrowser
+import random
 
 from debug import debug
+from graph import Graph
+
 
 class Window:
     root = None
     canvas = None
     menu = None
     sidebar = None
+    current_graph = None
     canvas_padding = 20
 
     def __init__(self, title, width, height, canvas_padding=25):
@@ -27,12 +31,27 @@ class Window:
         self.root.update()
 
     def create_menu(self):
+        new_graph_menu = tk.Menu(self.menu)
+        new_graph_menu.add_command(label="Complete Graph", command=self.new_complete_graph)
+
+        self.menu.add_cascade(label="New", menu=new_graph_menu)
         self.menu.add_command(label="About", command=self.about)
         self.menu.add_command(label="Exit", command=self.root.quit)
 
     def about(self):
         webbrowser.open("https://github.com/cytobi/py-graphs")
         
+    def new_complete_graph(self):
+        debug("Creating new complete graph...")
+        self.current_graph = Graph.new_complete_graph(random.randint(3, 10))
+        self.update_graph()
+
+    def  update_graph(self):
+        self.canvas.delete("all")
+        self.current_graph.draw(self)
+
+    def set_current_graph(self, graph):
+        self.current_graph = graph
 
     def display(self):
         debug("Displaying window...")
