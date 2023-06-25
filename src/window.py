@@ -14,6 +14,8 @@ class Window:
     current_graph = None
     canvas_padding = 20 # padding around the canvas
     zoom = 1 # zoom factor
+    drag_start_x = 0 # x coordinate of the start of a canvas drag
+    drag_start_y = 0 # y coordinate of the start of a canvas drag
 
     def __init__(self, title, width, height, canvas_padding=25):
         debug("Creating window...")
@@ -30,9 +32,11 @@ class Window:
         self.canvas = tk.Canvas(self.root, width=width, height=height)
         self.canvas.pack(expand=True, fill=tk.BOTH)
         # register event handlers
-        self.root.bind_all("<MouseWheel>", self.zoom_canvas) # windows
-        self.root.bind_all("<Button-4>", self.zoom_canvas) # linux
-        self.root.bind_all("<Button-5>", lambda event: self.zoom_canvas(event, invert=True)) # linux
+        self.root.bind_all("<MouseWheel>", self.zoom_canvas) # windows zoom
+        self.root.bind_all("<Button-4>", self.zoom_canvas) # linux zoom
+        self.root.bind_all("<Button-5>", lambda event: self.zoom_canvas(event, invert=True)) # linux zoom
+        self.canvas.bind("<ButtonPress-1>", self.drag_canvas_start) # drag canvas
+        self.canvas.bind("<ButtonRelease-1>", self.drag_canvas_end)
         # update root window
         self.root.update()
 
@@ -78,6 +82,23 @@ class Window:
             self.zoom *= 1.1
         else:
             self.zoom /= 1.1
+        self.update_graph()
+
+    # event handlers for dragging the canvas
+    def drag_canvas_start(self, event):
+        debug("Starting canvas drag...")
+        self.drag_start_x = event.x
+        self.drag_start_y = event.y
+
+    def drag_canvas_end(self, event):
+        debug("Ending canvas drag...")
+        dx = event.x - self.drag_start_x
+        dy = event.y - self.drag_start_y
+        tx, ty = self.canvas_to_unitsquare_coords(dx, dy, direction=True)
+        # move nodes instead of canvas
+        for node in self.current_graph.nodes:
+            node.x += tx
+            node.y += ty
         self.update_graph()
 
     # helper to convert coordinates and directions from the unit square to the canvas of this window
