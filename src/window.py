@@ -1,4 +1,6 @@
 import tkinter as tk
+import webbrowser
+
 from debug import debug
 
 class Window:
@@ -25,7 +27,12 @@ class Window:
         self.root.update()
 
     def create_menu(self):
+        self.menu.add_command(label="About", command=self.about)
         self.menu.add_command(label="Exit", command=self.root.quit)
+
+    def about(self):
+        webbrowser.open("https://github.com/cytobi/py-graphs")
+        
 
     def display(self):
         debug("Displaying window...")
