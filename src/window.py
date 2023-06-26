@@ -91,7 +91,7 @@ class Window:
     # event handler for zooming the canvas
     def zoom_canvas(self, event, invert=False):
         debug("Zooming canvas...")
-        if (event.delta > 0) ^ (not invert):
+        if (event.delta > 0) is invert:
             self.zoom *= 1.1
         else:
             self.zoom /= 1.1
