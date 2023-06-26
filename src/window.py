@@ -17,6 +17,7 @@ class Window:
     zoom = 1 # zoom factor
 
     current_graph = None
+    current_tool = None
 
     drag_canvas = False # whether the canvas is being dragged (and not a node)
     drag_start_x = 0 # x coordinate of the start of a canvas drag
@@ -34,6 +35,11 @@ class Window:
         self.menu = tk.Menu(self.root)
         self.root.config(menu=self.menu)
         self.create_menu()
+        # create sidebar
+        self.sidebar = tk.Frame(self.root, width=200, height=height, borderwidth=2, relief=tk.RAISED)
+        self.sidebar.pack(side=tk.LEFT, fill=tk.BOTH)
+        self.sidebar.pack_propagate(False)
+        self.create_sidebar()
         # create canvas
         self.canvas = tk.Canvas(self.root, width=width, height=height)
         self.canvas.pack(expand=True, fill=tk.BOTH)
@@ -56,6 +62,21 @@ class Window:
         self.menu.add_command(label="About", command=self.about)
         self.menu.add_command(label="Exit", command=self.root.quit)
 
+    # definition of the sidebar
+    def create_sidebar(self):
+        # tool frame
+        tools_height = 40
+        tools = tk.Frame(self.sidebar, width=200, height=tools_height)
+        tools.pack(side=tk.TOP, fill=tk.BOTH)
+        tools.pack_propagate(False)
+        # divider below tools
+        self.divider(tools, width=200, horizontal=True)
+        # buttons for tools
+        drag_button = tk.Button(tools, text="drag", command=lambda: self.set_current_tool("drag"))
+        drag_button.pack(side=tk.LEFT, padx=5, pady=5)
+        select_button = tk.Button(tools, text="select", command=lambda: self.set_current_tool("select"))
+        select_button.pack(side=tk.LEFT, padx=0, pady=5)
+
     def about(self):
         webbrowser.open("https://github.com/cytobi/py-graphs")
 
@@ -73,6 +94,9 @@ class Window:
         self.zoom = 1 # reset zoom
         self.current_graph.spring_layout()
         self.update_graph()
+
+    def set_current_tool(self, tool):
+        self.current_tool = tool
 
     # displays the window, must be called at the end of the main function
     def display(self):
@@ -151,3 +175,13 @@ class Window:
             return x/zoomed_half, y/zoomed_half
         else:
             return (x - canvas_width/2)/zoomed_half, (y - canvas_height/2)/zoomed_half
+        
+    # helper for creating a divider with tkinter, divider is placed on right/bottom of parent and should be the first element
+    def divider(self, parent, height=2, width=2, horizontal=True):
+        canvas = tk.Canvas(parent, width=width, height=height)
+        if horizontal:
+            canvas.create_line(0, height/2, width, height/2)
+            canvas.pack(side=tk.BOTTOM, fill=tk.BOTH)
+        else:
+            canvas.create_line(width/2, 0, width/2, height)
+            canvas.pack(side=tk.RIGHT, fill=tk.BOTH)
