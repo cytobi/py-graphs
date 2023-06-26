@@ -72,9 +72,13 @@ class Window:
         # divider below tools
         self.divider(tools, width=200, horizontal=True)
         # buttons for tools
-        drag_button = tk.Button(tools, text="drag", command=lambda: self.set_current_tool("drag"))
+        drag_image = tk.PhotoImage(file="assets/drag.png").subsample(22, 22)
+        drag_button = tk.Button(tools, image=drag_image, command=lambda: self.set_current_tool("drag"))
+        drag_button.image = drag_image # prevent garbage collection by keeping a reference
         drag_button.pack(side=tk.LEFT, padx=5, pady=5)
-        select_button = tk.Button(tools, text="select", command=lambda: self.set_current_tool("select"))
+        select_image = tk.PhotoImage(file="assets/select.png").subsample(25, 25)
+        select_button = tk.Button(tools, image=select_image, command=lambda: self.set_current_tool("select"))
+        select_button.image = select_image # prevent garbage collection by keeping a reference
         select_button.pack(side=tk.LEFT, padx=0, pady=5)
 
     def about(self):
