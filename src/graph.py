@@ -69,13 +69,24 @@ class Node:
         self.radius = radius
         canvas_x, canvas_y = window.unitsquare_to_canvas_coords(self.x, self.y)
         circle = window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill="white")
-        self.bind_drag(window, circle)
+        self.bind_actions(window, circle)
         label = window.canvas.create_text(canvas_x, canvas_y, text=self.name)
-        self.bind_drag(window, label) # bind drag to label as well
+        self.bind_actions(window, label) # bind drag to label as well
 
-    def bind_drag(self, window, bind_to):
-        window.canvas.tag_bind(bind_to, "<ButtonPress-1>", self.on_drag_start)
-        window.canvas.tag_bind(bind_to, "<ButtonRelease-1>", lambda event: self.on_drag_end(event, window))
+    # bindings to handle events on node
+    def bind_actions(self, window, bind_to):
+        window.canvas.tag_bind(bind_to, "<ButtonPress-1>", lambda event: self.handle_press(event, window))
+        window.canvas.tag_bind(bind_to, "<ButtonRelease-1>", lambda event: self.handle_release(event, window))
+
+    def handle_press(self, event, window):
+        debug("Node " + str(self.name) + " pressed")
+        if window.current_tool == "drag":
+            self.on_drag_start(event)
+
+    def handle_release(self, event, window):
+        debug("Node " + str(self.name) + " released")
+        if window.current_tool == "drag":
+            self.on_drag_end(event, window)
 
     def on_drag_start(self, event):
         debug("Starting node drag...")

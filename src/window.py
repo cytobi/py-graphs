@@ -17,7 +17,7 @@ class Window:
     zoom = 1 # zoom factor
 
     current_graph = None
-    current_tool = None
+    current_tool = "drag"
 
     drag_canvas = False # whether the canvas is being dragged (and not a node)
     drag_start_x = 0 # x coordinate of the start of a canvas drag
