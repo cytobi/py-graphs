@@ -10,7 +10,7 @@ class Graph:
     properties = {} # properties of the graph to display in the sidebar
 
     def __init__(self, nx_graph):
-        debug("Initializing graph...")
+        debug("Initializing graph: " + str(self))
         self.nx_graph = nx_graph
         self.pos = nx.spring_layout(nx_graph) # default layout
         # nodes is a list of Node objects constructed by passing the position of the node in the layout
@@ -42,7 +42,7 @@ class Graph:
             node.y = self.pos[node.name][1]
 
     def draw(self, window):
-        debug("Drawing graph...")
+        debug("Drawing graph: " + str(self.nx_graph))
         for edge in self.edges:
             edge.draw(window)
         for node in self.nodes:
@@ -89,14 +89,14 @@ class Node:
             self.on_drag_end(event, window)
 
     def on_drag_start(self, event):
-        debug("Starting node drag...")
+        debug("Starting drag of node " + str(self.name))
         self.drag_start_x = event.x
         self.drag_start_y = event.y
 
     def on_drag_end(self, event, window):
-        debug("Ending node drag...")
         dx = event.x - self.drag_start_x
         dy = event.y - self.drag_start_y
+        debug("Ending drag of node " + str(self.name) + " with delta of " + str((dx, dy)))
         tx, ty = window.canvas_to_unitsquare_coords(dx, dy, direction=True)
         self.x += tx
         self.y += ty

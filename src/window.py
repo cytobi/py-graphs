@@ -60,7 +60,7 @@ class Window:
         self.menu.add_cascade(label="New", menu=new_graph_menu)
         self.menu.add_command(label="Reset", command=self.reset_graph)
         self.menu.add_command(label="About", command=self.about)
-        self.menu.add_command(label="Exit", command=self.root.quit)
+        self.menu.add_command(label="Exit", command=self.exit)
 
     # definition of the sidebar
     def create_sidebar(self):
@@ -84,6 +84,10 @@ class Window:
     def about(self):
         webbrowser.open("https://github.com/cytobi/py-graphs")
 
+    def exit(self):
+        debug("Exiting...")
+        self.root.quit()
+
 
     # graph handling
     def set_current_graph(self, graph):
@@ -94,17 +98,18 @@ class Window:
         self.current_graph.draw(self)
 
     def reset_graph(self):
-        debug("Resetting graph...")
+        debug("Resetting graph: " + str(self.current_graph))
         self.zoom = 1 # reset zoom
         self.current_graph.spring_layout()
         self.update_graph()
 
     def set_current_tool(self, tool):
+        debug("Setting current tool to " + str(tool))
         self.current_tool = tool
 
     # displays the window, must be called at the end of the main function
     def display(self):
-        debug("Displaying window...")
+        debug("Displaying window: " + str(self))
         self.root.mainloop()
 
 
@@ -118,11 +123,11 @@ class Window:
     # event handlers
     # event handler for zooming the canvas
     def zoom_canvas(self, event, invert=False):
-        debug("Zooming canvas...")
         if (event.delta > 0) is invert:
             self.zoom *= 1.1
         else:
             self.zoom /= 1.1
+        debug("Zooming canvas to " + str(self.zoom))
         self.update_graph()
 
     # event handlers for dragging the canvas
@@ -143,9 +148,9 @@ class Window:
     def drag_canvas_end(self, event):
         if not self.drag_canvas:
             return
-        debug("Ending canvas drag...")
         dx = event.x - self.drag_start_x
         dy = event.y - self.drag_start_y
+        debug("Ending canvas drag with delta of " + str((dx, dy)))
         tx, ty = self.canvas_to_unitsquare_coords(dx, dy, direction=True)
         # move nodes instead of canvas
         for node in self.current_graph.nodes:
