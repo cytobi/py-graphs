@@ -5,7 +5,6 @@ from debug import debug
 # represents a graph including its layout
 class Graph:
     nx_graph = None # networkx graph
-    pos = None # layout
     nodes = [] # list of nodes
     edges = [] # list of edges
     properties = {} # properties of the graph to display in the sidebar
@@ -13,11 +12,11 @@ class Graph:
     def __init__(self, nx_graph):
         debug("Initializing graph: " + str(self))
         self.nx_graph = nx_graph
-        self.pos = nx.spring_layout(nx_graph) # default layout
+        pos = nx.spring_layout(nx_graph) # default layout
         # nodes is a list of Node objects constructed by passing the position of the node in the layout
         self.nodes = []
         for node in nx_graph.nodes():
-            self.nodes.append(Node(node, self.pos[node][0], self.pos[node][1]))
+            self.nodes.append(Node(node, pos[node][0], pos[node][1]))
         # edges is a list of Edge objects constructed by passing the already created node objects
         self.edges = [] 
         for edge in nx_graph.edges():
@@ -52,10 +51,10 @@ class Graph:
     
     # creates a new spring layout for this graph
     def spring_layout(self):
-        self.pos = nx.spring_layout(self.nx_graph)
+        pos = nx.spring_layout(self.nx_graph)
         for node in self.nodes:
-            node.x = self.pos[node.name][0]
-            node.y = self.pos[node.name][1]
+            node.x = pos[node.name][0]
+            node.y = pos[node.name][1]
 
     def calculate_properties(self):
         debug("Calculating properties of graph: " + str(self))
