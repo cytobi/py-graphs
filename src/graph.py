@@ -129,18 +129,24 @@ class Edge:
     node1 = None
     node2 = None
     weight = None
+    directed = False
 
     color = "black"
 
-    def __init__(self, node1, node2, weight=None, color="black"):
+    def __init__(self, node1, node2, weight=None, color="black", directed=True):
         self.node1 = node1
         self.node2 = node2
         self.weight = weight
         self.color = color
+        self.directed = directed
 
     def draw(self, window):
         canvas_x1, canvas_y1 = window.unitsquare_to_canvas_coords(self.node1.x, self.node1.y)
         canvas_x2, canvas_y2 = window.unitsquare_to_canvas_coords(self.node2.x, self.node2.y)
-        window.canvas.create_line(canvas_x1, canvas_y1, canvas_x2, canvas_y2, fill=self.color)
+        if self.directed: # create two lines to draw arrow markings at halfway point
+            window.canvas.create_line(canvas_x1, canvas_y1, (canvas_x1+canvas_x2)/2, (canvas_y1+canvas_y2)/2, arrow="last", fill=self.color)
+            window.canvas.create_line((canvas_x1+canvas_x2)/2, (canvas_y1+canvas_y2)/2, canvas_x2, canvas_y2, fill=self.color)
+        else:
+            window.canvas.create_line(canvas_x1, canvas_y1, canvas_x2, canvas_y2, fill=self.color)
         if self.weight is not None:
             window.canvas.create_text((canvas_x1+canvas_x2)/2, (canvas_y1+canvas_y2)/2, text=self.weight)
