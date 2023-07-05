@@ -17,10 +17,9 @@ class Tool(ABC):
     name = ""
     description = ""
 
-    def __init__(self, name, description, icon):
+    def __init__(self, name, description):
         self.name = name
         self.description = description
-        self.icon = icon
 
     @abstractmethod
     def handle_node_press(self, window, node, event):
