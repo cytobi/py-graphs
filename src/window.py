@@ -103,6 +103,7 @@ class Window:
 
     def update_graph(self):
         self.canvas.delete("all")
+        self.current_graph.calculate_properties()
         self.current_graph.draw(self)
 
     def reset_graph(self):
@@ -111,8 +112,9 @@ class Window:
         self.current_graph.spring_layout()
         self.update_graph()
 
-    def update_properties(self, properties):
+    def update_properties(self):
         debug("Updating properties in sidebar...")
+        properties = self.current_graph.properties
         text = ""
         for key in properties:
             text += key + ": " + str(properties[key]) + "\n"

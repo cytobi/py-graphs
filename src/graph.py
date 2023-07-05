@@ -23,20 +23,7 @@ class Graph:
         for edge in nx_graph.edges():
             self.edges.append(Edge(self.get_node(edge[0]), self.get_node(edge[1])))
         # properties is a dictionary of properties to display in the sidebar
-        debug("Calculating properties of graph: " + str(self))
-        self.properties = {"nodes": len(self.nodes),
-                           "edges": len(self.edges),
-                           "density": nx.density(nx_graph),
-                           "planar": nx.is_planar(nx_graph),
-                           "empty": nx.is_empty(nx_graph),
-                           "connected": nx.is_connected(nx_graph),
-                           "directed": nx.is_directed(nx_graph),
-                           "bipartite": nx.is_bipartite(nx_graph),
-                           "tree": nx.is_tree(nx_graph),
-                           "forest": nx.is_forest(nx_graph),
-                           "eulerian": nx.is_eulerian(nx_graph),
-                           "regular": nx.is_regular(nx_graph),
-                           }
+        self.calculate_properties()
 
     def get_node(self, name):
         for node in self.nodes:
@@ -45,10 +32,17 @@ class Graph:
         return None
     
     def get_edge(self, node1, node2):
-        for edge in self.edges:
-            if (edge.node1 == node1 and edge.node2 == node2) or (edge.node1 == node2 and edge.node2 == node1):
+        for edge in self.edges: # get edge between node1 and node2 or node2 and node1 if undirected
+            if (edge.node1 == node1 and edge.node2 == node2) or (edge.node1 == node2 and edge.node2 == node1 and not edge.directed):
                 return edge
         return None
+    
+    def has_edge(self, node1, node2):
+        return self.get_edge(node1, node2) is not None
+    
+    def add_edge(self, node1, node2, weight=None, color="black", directed=False):
+        self.nx_graph.add_edge(node1.name, node2.name)
+        self.edges.append(Edge(node1, node2, weight, color, directed))
     
     # creates a new spring layout for this graph
     def spring_layout(self):
@@ -57,13 +51,29 @@ class Graph:
             node.x = self.pos[node.name][0]
             node.y = self.pos[node.name][1]
 
+    def calculate_properties(self):
+        debug("Calculating properties of graph: " + str(self))
+        self.properties = {"nodes": len(self.nx_graph.nodes()),
+                           "edges": len(self.nx_graph.edges()),
+                           "density": nx.density(self.nx_graph),
+                           "planar": nx.is_planar(self.nx_graph),
+                           "empty": nx.is_empty(self.nx_graph),
+                           "connected": nx.is_connected(self.nx_graph),
+                           "directed": nx.is_directed(self.nx_graph),
+                           "bipartite": nx.is_bipartite(self.nx_graph),
+                           "tree": nx.is_tree(self.nx_graph),
+                           "forest": nx.is_forest(self.nx_graph),
+                           "eulerian": nx.is_eulerian(self.nx_graph),
+                           "regular": nx.is_regular(self.nx_graph),
+                           }
+
     def draw(self, window):
         debug("Drawing graph: " + str(self.nx_graph))
         for edge in self.edges:
             edge.draw(window)
         for node in self.nodes:
             node.draw(window)
-        window.update_properties(self.properties)
+        window.update_properties()
 
     @staticmethod
     def new_complete_graph(n):

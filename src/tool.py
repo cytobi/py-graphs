@@ -113,11 +113,25 @@ class SelectTool(Tool):
         pass
 
 class AddTool(Tool):
+    start_node = None
+
     def __init__(self):
         super().__init__("add", "Add Tool")
 
     def handle_node_press(self, window, node, event):
-        pass
+        if self.start_node is None:
+            self.start_node = node
+            node.selected = True
+            window.update_graph()
+        else:
+            if window.current_graph.has_edge(self.start_node, node):
+                debug("Error: edge already exists between " + str(self.start_node.name) + " and " + str(node.name))
+            else:
+                debug("Adding edge between " + str(self.start_node.name) + " and " + str(node.name))
+                window.current_graph.add_edge(self.start_node, node)
+            self.start_node.selected = False
+            self.start_node = None
+            window.update_graph()
 
     def handle_node_release(self, window, node, event):
         pass
