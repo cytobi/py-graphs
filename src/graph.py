@@ -1,4 +1,5 @@
 import networkx as nx # graph library
+import math
 from debug import debug
 
 # represents a graph including its layout
@@ -133,7 +134,7 @@ class Edge:
 
     color = "black"
 
-    def __init__(self, node1, node2, weight=None, color="black", directed=True):
+    def __init__(self, node1, node2, weight=None, color="black", directed=False):
         self.node1 = node1
         self.node2 = node2
         self.weight = weight
@@ -149,4 +150,11 @@ class Edge:
         else:
             window.canvas.create_line(canvas_x1, canvas_y1, canvas_x2, canvas_y2, fill=self.color)
         if self.weight is not None:
-            window.canvas.create_text((canvas_x1+canvas_x2)/2, (canvas_y1+canvas_y2)/2, text=self.weight)
+            vector = (canvas_x2-canvas_x1, canvas_y2-canvas_y1) # vector from node1 to node2
+            length = math.sqrt(vector[0]**2 + vector[1]**2) # length of vector
+            vector = (vector[0]/length, vector[1]/length) # normalize vector
+            rotated = (vector[0]*math.cos(math.pi/2)-vector[1]*math.sin(math.pi/2), vector[0]*math.sin(math.pi/2)+vector[1]*math.cos(math.pi/2)) # rotate vector by 90 degrees
+            # calculate label position
+            label_x = (canvas_x1+canvas_x2)/2 + rotated[0]*15 
+            label_y = (canvas_y1+canvas_y2)/2 + rotated[1]*15
+            window.canvas.create_text(label_x, label_y, text=self.weight)
