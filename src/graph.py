@@ -31,6 +31,12 @@ class Graph:
                 return node
         return None
     
+    def add_node(self, x, y, name=None):
+        if name is None:
+            name = str(len(self.nx_graph.nodes()))
+        self.nx_graph.add_node(name)
+        self.nodes.append(Node(name, x, y))
+    
     def get_edge(self, node1, node2):
         for edge in self.edges: # get edge between node1 and node2 or node2 and node1 if undirected
             if (edge.node1 == node1 and edge.node2 == node2) or (edge.node1 == node2 and edge.node2 == node1 and not edge.directed):

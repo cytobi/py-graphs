@@ -137,7 +137,14 @@ class AddTool(Tool):
         pass
 
     def handle_canvas_press(self, window, event):
-        pass
+        # check if a node was clicked
+        for node in window.current_graph.nodes:
+            canvas_x, canvas_y = window.unitsquare_to_canvas_coords(node.x, node.y)
+            if math.dist((canvas_x, canvas_y), (event.x, event.y)) < node.radius:
+                return
+        unit_x, unit_y = window.canvas_to_unitsquare_coords(event.x, event.y)
+        window.current_graph.add_node(unit_x, unit_y)
+        window.update_graph()
 
     def handle_canvas_release(self, window, event):
         pass
