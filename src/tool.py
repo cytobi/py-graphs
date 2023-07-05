@@ -2,6 +2,17 @@ from abc import ABC, abstractmethod
 
 from debug import debug
 
+class ToolFactory:
+    @staticmethod
+    def get_tool(name):
+        if name == "drag":
+            return DragTool()
+        elif name == "select":
+            return SelectTool()
+        else:
+            raise ValueError("Unknown tool name: " + str(name))
+
+
 class Tool(ABC):
     name = ""
     description = ""
@@ -42,3 +53,12 @@ class DragTool(Tool):
         node.y += ty
         window.update_graph()
 
+class SelectTool(Tool):
+    def __init__(self):
+        super().__init__("select", "Select Tool", None)
+
+    def handle_node_press(self, window, node, event):
+        pass
+
+    def handle_node_release(self, window, node, event):
+        pass

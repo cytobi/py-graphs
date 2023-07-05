@@ -5,7 +5,7 @@ import math
 
 from debug import debug
 from graph import Graph
-from tool import Tool, DragTool
+from tool import Tool, ToolFactory
 
 
 class Window:
@@ -18,7 +18,7 @@ class Window:
     zoom = 1 # zoom factor
 
     current_graph = None
-    current_tool = DragTool()
+    current_tool = ToolFactory.get_tool("drag")
 
     drag_canvas = False # whether the canvas is being dragged (and not a node)
     drag_start_x = 0 # x coordinate of the start of a canvas drag
@@ -117,9 +117,9 @@ class Window:
         self.sidebar.properties.delete("1.0", tk.END)
         self.sidebar.properties.insert(tk.END, text)
 
-    def set_current_tool(self, tool): #deprecated
+    def set_current_tool(self, tool):
         debug("Setting current tool to " + str(tool))
-        self.current_tool = tool
+        self.current_tool = ToolFactory.get_tool(tool)
 
     # displays the window, must be called at the end of the main function
     def display(self):
