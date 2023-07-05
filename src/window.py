@@ -81,6 +81,8 @@ class Window:
         select_button = tk.Button(tools, image=select_image, command=lambda: self.set_current_tool("select"))
         select_button.image = select_image # prevent garbage collection by keeping a reference
         select_button.pack(side=tk.LEFT, padx=0, pady=5)
+        add_button = tk.Button(tools, text="+", command=lambda: self.set_current_tool("add"))
+        add_button.pack(side=tk.LEFT, padx=5, pady=5)
         # draw properties text field
         properties = tk.Text(self.sidebar, yscrollcommand=True)
         properties.pack(side=tk.BOTTOM, fill=tk.BOTH)
