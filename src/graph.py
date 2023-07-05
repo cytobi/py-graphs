@@ -75,6 +75,8 @@ class Node:
     x = 0
     y = 0
     radius = 20 # last radius used to draw the node
+    color = "white"
+    selected = False # whether the node is currently selected
 
     def __init__(self, name, x, y):
         self.name = name
@@ -83,11 +85,16 @@ class Node:
 
     def draw(self, window, radius=20):
         self.radius = radius
+        outline = "black"
+        outline_width = 1
+        if self.selected:
+            outline = "blue"
+            outline_width = 3
         canvas_x, canvas_y = window.unitsquare_to_canvas_coords(self.x, self.y)
-        circle = window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill="white")
+        circle = window.canvas.create_oval(canvas_x-radius, canvas_y-radius, canvas_x+radius, canvas_y+radius, fill=self.color, outline=outline, width=outline_width)
         self.bind_actions(window, circle)
         label = window.canvas.create_text(canvas_x, canvas_y, text=self.name)
-        self.bind_actions(window, label) # bind drag to label as well
+        self.bind_actions(window, label) # bind actions to label as well
 
     # bindings to handle events on node
     def bind_actions(self, window, bind_to):
