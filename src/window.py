@@ -11,7 +11,7 @@ class Window:
     root = None # root window
     canvas = None # canvas to draw on
     menu = None # menu bar
-    sidebar = None # sidebar to display properties of the graph#
+    sidebar = None # sidebar to display properties of the graph
 
     canvas_padding = 20 # padding around the canvas
     zoom = 1 # zoom factor
@@ -80,6 +80,11 @@ class Window:
         select_button = tk.Button(tools, image=select_image, command=lambda: self.set_current_tool("select"))
         select_button.image = select_image # prevent garbage collection by keeping a reference
         select_button.pack(side=tk.LEFT, padx=0, pady=5)
+        # draw properties text field
+        properties = tk.Text(self.sidebar, yscrollcommand=True)
+        properties.pack(side=tk.BOTTOM, fill=tk.BOTH)
+        properties.insert(tk.END, "Properties of the graph will be displayed here.")
+        self.sidebar.properties = properties # make text field accessible from outside
 
     def about(self):
         webbrowser.open("https://github.com/cytobi/py-graphs")
@@ -102,6 +107,14 @@ class Window:
         self.zoom = 1 # reset zoom
         self.current_graph.spring_layout()
         self.update_graph()
+
+    def update_properties(self, properties):
+        debug("Updating properties in sidebar...")
+        text = ""
+        for key in properties:
+            text += key + ": " + str(properties[key]) + "\n"
+        self.sidebar.properties.delete("1.0", tk.END)
+        self.sidebar.properties.insert(tk.END, text)
 
     def set_current_tool(self, tool):
         debug("Setting current tool to " + str(tool))

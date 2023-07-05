@@ -21,6 +21,21 @@ class Graph:
         self.edges = [] 
         for edge in nx_graph.edges():
             self.edges.append(Edge(self.get_node(edge[0]), self.get_node(edge[1])))
+        # properties is a dictionary of properties to display in the sidebar
+        debug("Calculating properties of graph: " + str(self))
+        self.properties = {"nodes": len(self.nodes),
+                           "edges": len(self.edges),
+                           "density": nx.density(nx_graph),
+                           "planar": nx.is_planar(nx_graph),
+                           "empty": nx.is_empty(nx_graph),
+                           "connected": nx.is_connected(nx_graph),
+                           "directed": nx.is_directed(nx_graph),
+                           "bipartite": nx.is_bipartite(nx_graph),
+                           "tree": nx.is_tree(nx_graph),
+                           "forest": nx.is_forest(nx_graph),
+                           "eulerian": nx.is_eulerian(nx_graph),
+                           "regular": nx.is_regular(nx_graph),
+                           }
 
     def get_node(self, name):
         for node in self.nodes:
@@ -47,6 +62,7 @@ class Graph:
             edge.draw(window)
         for node in self.nodes:
             node.draw(window)
+        window.update_properties(self.properties)
 
     @staticmethod
     def new_complete_graph(n):
