@@ -97,7 +97,9 @@ class SelectTool(Tool):
         super().__init__("select", "Select Tool")
 
     def handle_node_press(self, window, node, event):
-        pass
+        debug("Selecting/Unselecting node " + str(node.name))
+        node.selected = not node.selected
+        window.update_graph()
 
     def handle_node_release(self, window, node, event):
         pass
