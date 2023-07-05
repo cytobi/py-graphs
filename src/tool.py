@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import math
 
 from debug import debug
 
@@ -29,27 +30,67 @@ class Tool(ABC):
     def handle_node_release(self, window, node, event):
         pass
 
+    @abstractmethod
+    def handle_canvas_press(self, window, event):
+        pass
+
+    @abstractmethod
+    def handle_canvas_release(self, window, event):
+        pass
+
 
 class DragTool(Tool):
-    drag_start_x = 0
-    drag_start_y = 0
+    node_drag_start_x = 0
+    node_drag_start_y = 0
+
+    drag_canvas = False
+    canvas_drag_start_x = 0
+    canvas_drag_start_y = 0
 
     def __init__(self):
         super().__init__("drag", "Drag Tool")
 
     def handle_node_press(self, window, node, event):
         debug("Starting drag of node " + str(node.name))
-        self.drag_start_x = event.x
-        self.drag_start_y = event.y
+        self.node_drag_start_x = event.x
+        self.node_drag_start_y = event.y
 
     def handle_node_release(self, window, node, event):
-        dx = event.x - self.drag_start_x
-        dy = event.y - self.drag_start_y
+        dx = event.x - self.node_drag_start_x
+        dy = event.y - self.node_drag_start_y
         debug("Ending drag of node " + str(node.name) + " with delta of " + str((dx, dy)))
         tx, ty = window.canvas_to_unitsquare_coords(dx, dy, direction=True)
         node.x += tx
         node.y += ty
         window.update_graph()
+
+    def handle_canvas_press(self, window, event):
+        # check if a node was clicked
+        drag_canvas = True
+        for node in window.current_graph.nodes:
+            canvas_x, canvas_y = window.unitsquare_to_canvas_coords(node.x, node.y)
+            if math.dist((canvas_x, canvas_y), (event.x, event.y)) < node.radius:
+                drag_canvas = False
+                break
+        self.drag_canvas = drag_canvas
+        if self.drag_canvas:
+            debug("Starting canvas drag...")
+            self.canvas_drag_start_x = event.x
+            self.canvas_drag_start_y = event.y
+
+    def handle_canvas_release(self, window, event):
+        if not self.drag_canvas:
+            return
+        dx = event.x - self.canvas_drag_start_x
+        dy = event.y - self.canvas_drag_start_y
+        debug("Ending canvas drag with delta of " + str((dx, dy)))
+        tx, ty = window.canvas_to_unitsquare_coords(dx, dy, direction=True)
+        # move nodes instead of canvas
+        for node in window.current_graph.nodes:
+            node.x += tx
+            node.y += ty
+        window.update_graph()
+        self.drag_canvas = False
 
 class SelectTool(Tool):
     def __init__(self):
@@ -59,4 +100,10 @@ class SelectTool(Tool):
         pass
 
     def handle_node_release(self, window, node, event):
+        pass
+
+    def handle_canvas_press(self, window, event):
+        pass
+
+    def handle_canvas_release(self, window, event):
         pass

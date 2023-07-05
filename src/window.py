@@ -48,8 +48,8 @@ class Window:
         self.root.bind_all("<MouseWheel>", self.zoom_canvas) # windows zoom
         self.root.bind_all("<Button-4>", self.zoom_canvas) # linux zoom
         self.root.bind_all("<Button-5>", lambda event: self.zoom_canvas(event, invert=True)) # linux zoom
-        self.canvas.bind("<ButtonPress-1>", self.drag_canvas_start) # drag canvas
-        self.canvas.bind("<ButtonRelease-1>", self.drag_canvas_end)
+        self.canvas.bind("<ButtonPress-1>", self.handle_canvas_press)
+        self.canvas.bind("<ButtonRelease-1>", self.handle_canvas_release)
         # update root window
         self.root.update()
 
@@ -144,34 +144,12 @@ class Window:
         debug("Zooming canvas to " + str(self.zoom))
         self.update_graph()
 
-    # event handlers for dragging the canvas
-    def drag_canvas_start(self, event):
-        # check if a node was clicked, slow/cumbersome implementation, maybe different tools?
-        drag_canvas = True
-        for node in self.current_graph.nodes:
-            canvas_x, canvas_y = self.unitsquare_to_canvas_coords(node.x, node.y)
-            if math.dist((canvas_x, canvas_y), (event.x, event.y)) < node.radius:
-                drag_canvas = False
-                break
-        self.drag_canvas = drag_canvas
-        if self.drag_canvas:
-            debug("Starting canvas drag...")
-            self.drag_start_x = event.x
-            self.drag_start_y = event.y
+    # event handlers for grabbing the canvas
+    def handle_canvas_press(self, event):
+        self.current_tool.handle_canvas_press(self, event)
 
-    def drag_canvas_end(self, event):
-        if not self.drag_canvas:
-            return
-        dx = event.x - self.drag_start_x
-        dy = event.y - self.drag_start_y
-        debug("Ending canvas drag with delta of " + str((dx, dy)))
-        tx, ty = self.canvas_to_unitsquare_coords(dx, dy, direction=True)
-        # move nodes instead of canvas
-        for node in self.current_graph.nodes:
-            node.x += tx
-            node.y += ty
-        self.update_graph()
-        self.drag_canvas = False
+    def handle_canvas_release(self, event):
+        self.current_tool.handle_canvas_release(self, event)
 
 
     # helpers
