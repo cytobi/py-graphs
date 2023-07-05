@@ -10,6 +10,8 @@ class ToolFactory:
             return DragTool()
         elif name == "select":
             return SelectTool()
+        elif name == "add":
+            return AddTool()
         else:
             raise ValueError("Unknown tool name: " + str(name))
 
@@ -100,6 +102,22 @@ class SelectTool(Tool):
         debug("Selecting/Unselecting node " + str(node.name))
         node.selected = not node.selected
         window.update_graph()
+
+    def handle_node_release(self, window, node, event):
+        pass
+
+    def handle_canvas_press(self, window, event):
+        pass
+
+    def handle_canvas_release(self, window, event):
+        pass
+
+class AddTool(Tool):
+    def __init__(self):
+        super().__init__("add", "Add Tool")
+
+    def handle_node_press(self, window, node, event):
+        pass
 
     def handle_node_release(self, window, node, event):
         pass
