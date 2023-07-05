@@ -78,10 +78,11 @@ class Node:
     color = "white"
     selected = False # whether the node is currently selected
 
-    def __init__(self, name, x, y):
+    def __init__(self, name, x, y, color="white"):
         self.name = name
         self.x = x
         self.y = y
+        self.color = color
 
     def draw(self, window, radius=20):
         self.radius = radius
@@ -129,14 +130,17 @@ class Edge:
     node2 = None
     weight = None
 
-    def __init__(self, node1, node2, weight=None):
+    color = "black"
+
+    def __init__(self, node1, node2, weight=None, color="black"):
         self.node1 = node1
         self.node2 = node2
         self.weight = weight
+        self.color = color
 
     def draw(self, window):
         canvas_x1, canvas_y1 = window.unitsquare_to_canvas_coords(self.node1.x, self.node1.y)
         canvas_x2, canvas_y2 = window.unitsquare_to_canvas_coords(self.node2.x, self.node2.y)
-        window.canvas.create_line(canvas_x1, canvas_y1, canvas_x2, canvas_y2)
+        window.canvas.create_line(canvas_x1, canvas_y1, canvas_x2, canvas_y2, fill=self.color)
         if self.weight is not None:
             window.canvas.create_text((canvas_x1+canvas_x2)/2, (canvas_y1+canvas_y2)/2, text=self.weight)
