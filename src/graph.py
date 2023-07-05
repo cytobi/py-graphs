@@ -96,13 +96,11 @@ class Node:
 
     def handle_press(self, event, window):
         debug("Node " + str(self.name) + " pressed")
-        if window.current_tool == "drag":
-            self.on_drag_start(event)
+        window.current_tool.handle_node_press(window, self, event)
 
     def handle_release(self, event, window):
         debug("Node " + str(self.name) + " released")
-        if window.current_tool == "drag":
-            self.on_drag_end(event, window)
+        window.current_tool.handle_node_release(window, self, event)
 
     def on_drag_start(self, event):
         debug("Starting drag of node " + str(self.name))
