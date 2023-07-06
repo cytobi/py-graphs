@@ -62,7 +62,7 @@ class Window:
 
         self.menu.add_cascade(label="New", menu=new_graph_menu)
         self.menu.add_command(label="Reset", command=self.reset_graph)
-        self.menu.add_command(label="New Algorithm", command=self.run_algorithm)
+        self.menu.add_command(label="Algorithm", command=self.run_algorithm)
         self.menu.add_command(label="Step", command=self.step_algorithm)
         self.menu.add_command(label="About", command=self.about)
         self.menu.add_command(label="Exit", command=self.exit)
@@ -151,6 +151,7 @@ class Window:
 
     def step_algorithm(self):
         if self.current_algorithm is None:
+            debug("No algorithm initialized")
             return
         self.current_algorithm.step()
 

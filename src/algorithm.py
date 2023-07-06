@@ -26,6 +26,7 @@ class Algorithm(ABC):
         thread.start() # start thread
 
     # the algorithm should be implemented in this method, and should wait with self.pause() before each step
+    # it should also check whether self.pause() returns True, and if so, return from the method
     @abstractmethod
     def run(self, graph):
         pass

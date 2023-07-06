@@ -125,7 +125,7 @@ class AddTool(Tool):
             window.update_graph()
         else:
             if window.current_graph.has_edge(self.start_node, node):
-                debug("Error: edge already exists between " + str(self.start_node.name) + " and " + str(node.name))
+                debug("Edge already exists between " + str(self.start_node.name) + " and " + str(node.name))
             else:
                 debug("Adding edge between " + str(self.start_node.name) + " and " + str(node.name))
                 window.current_graph.add_edge(self.start_node, node)
