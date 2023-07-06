@@ -6,6 +6,7 @@ import math
 from debug import debug
 from graph import Graph
 from tool import Tool, ToolFactory
+from algorithm import Algorithm, TestAlgorithm
 
 
 class Window:
@@ -19,6 +20,7 @@ class Window:
 
     current_graph = None
     current_tool = ToolFactory.get_tool("drag")
+    current_algorithm = None
 
     drag_canvas = False # whether the canvas is being dragged (and not a node)
     drag_start_x = 0 # x coordinate of the start of a canvas drag
@@ -60,6 +62,8 @@ class Window:
 
         self.menu.add_cascade(label="New", menu=new_graph_menu)
         self.menu.add_command(label="Reset", command=self.reset_graph)
+        self.menu.add_command(label="New Algorithm", command=self.run_algorithm)
+        self.menu.add_command(label="Step", command=self.step_algorithm)
         self.menu.add_command(label="About", command=self.about)
         self.menu.add_command(label="Exit", command=self.exit)
 
@@ -94,6 +98,7 @@ class Window:
 
     def exit(self):
         debug("Exiting...")
+        self.current_algorithm.kill()
         self.root.quit()
 
 
@@ -135,6 +140,17 @@ class Window:
     def new_complete_graph(self):
         debug("Creating new complete graph...")
         self.current_graph = Graph.new_complete_graph(random.randint(3, 10))
+        self.update_graph()
+
+
+    # algorithms
+    def run_algorithm(self):
+        self.current_algorithm = TestAlgorithm()
+        self.current_algorithm.start(self.current_graph)
+        self.update_graph()
+
+    def step_algorithm(self):
+        self.current_algorithm.step()
         self.update_graph()
 
 
