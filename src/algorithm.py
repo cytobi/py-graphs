@@ -36,9 +36,15 @@ class Algorithm(ABC):
             debug("Executing next step in algorithm: " + self.name)
             self.barrier.wait()
 
+    # call this method to pause the algorithm, returns True if algorithm is being killed
     def pause(self):
         self.window.update_graph() # this is executed in this thread, maybe pass message to main thread?
-        self.barrier.wait()
+        try:
+            self.barrier.wait()
+        except threading.BrokenBarrierError:
+            debug("Barrier broken, algorithm finished: " + self.name)
+            return True
+        return False
 
     def kill(self):
         debug("Killing algorithm: " + self.name)
@@ -50,9 +56,11 @@ class TestAlgorithm(Algorithm):
         super().__init__("Test Algorithm", "This is a test algorithm that colors all nodes", window)
 
     def run(self, graph):
-        self.pause()
+        if self.pause(): # check if algorithm is being killed
+            return
         for node in graph.nodes:
             node.color = "red"
-            self.pause()
+            if self.pause():
+                return
         self.finished = True
         debug("Algorithm finished: " + self.name)
