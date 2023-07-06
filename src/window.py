@@ -47,6 +47,7 @@ class Window:
         self.canvas = tk.Canvas(self.root, width=width, height=height)
         self.canvas.pack(expand=True, fill=tk.BOTH)
         # register event handlers
+        self.root.bind("<<UpdateGraph>>", lambda event: self.update_graph())
         self.root.bind_all("<MouseWheel>", self.zoom_canvas) # windows zoom
         self.root.bind_all("<Button-4>", self.zoom_canvas) # linux zoom
         self.root.bind_all("<Button-5>", lambda event: self.zoom_canvas(event, invert=True)) # linux zoom
