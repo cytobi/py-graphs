@@ -98,7 +98,8 @@ class Window:
 
     def exit(self):
         debug("Exiting...")
-        self.current_algorithm.kill()
+        if self.current_algorithm is not None:
+            self.current_algorithm.kill()
         self.root.quit()
 
 
@@ -149,6 +150,8 @@ class Window:
         self.current_algorithm.start(self.current_graph)
 
     def step_algorithm(self):
+        if self.current_algorithm is None:
+            return
         self.current_algorithm.step()
 
 
