@@ -145,13 +145,11 @@ class Window:
 
     # algorithms
     def run_algorithm(self):
-        self.current_algorithm = TestAlgorithm()
+        self.current_algorithm = TestAlgorithm(self)
         self.current_algorithm.start(self.current_graph)
-        self.update_graph()
 
     def step_algorithm(self):
         self.current_algorithm.step()
-        self.update_graph()
 
 
     # event handlers
