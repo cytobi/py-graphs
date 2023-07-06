@@ -39,7 +39,7 @@ class Algorithm(ABC):
 
     # call this method to pause the algorithm, returns True if algorithm is being killed
     def pause(self):
-        self.window.update_graph() # this is executed in this thread, maybe pass message to main thread?
+        self.window.root.event_generate("<<UpdateGraph>>") # trigger update of graph in main thread
         try:
             self.barrier.wait()
         except threading.BrokenBarrierError:
