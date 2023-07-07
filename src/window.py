@@ -232,10 +232,10 @@ class Window:
         self.update_graph()
 
     def new_star_graph(self):
-        n = tk.simpledialog.askinteger("New Star Graph", "Enter number of nodes:", parent=self.root)
+        n = tk.simpledialog.askinteger("New Star Graph", "Enter number of arms:", parent=self.root)
         if n is None:
             return
-        if n < 1:
+        if n < 0:
             debug("Invalid number of nodes: " + str(n))
             return
         debug("Creating new star graph with " + str(n) + " nodes")
