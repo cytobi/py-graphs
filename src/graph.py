@@ -80,9 +80,46 @@ class Graph:
             node.draw(window)
         window.update_properties()
 
+    # static methods for creating new graphs
+    @staticmethod
+    def new_null_graph():
+        return Graph(nx.null_graph())
+    
+    @staticmethod
+    def new_trivial_graph():
+        return Graph(nx.trivial_graph())
+    
+    @staticmethod
+    def new_empty_graph(n):
+        return Graph(nx.empty_graph(n))
+    
     @staticmethod
     def new_complete_graph(n):
         return Graph(nx.complete_graph(n))
+    
+    @staticmethod
+    def new_complete_bipartite_graph(n1, n2):
+        return Graph(nx.complete_bipartite_graph(n1, n2))
+    
+    @staticmethod
+    def new_cycle_graph(n):
+        return Graph(nx.cycle_graph(n))
+    
+    @staticmethod
+    def new_path_graph(n):
+        return Graph(nx.path_graph(n))
+    
+    @staticmethod
+    def new_star_graph(n):
+        return Graph(nx.star_graph(n))
+    
+    @staticmethod
+    def  new_full_rary_tree(r, n):
+        return Graph(nx.full_rary_tree(r, n))
+    
+    @staticmethod
+    def new_balanced_tree(r, h):
+        return Graph(nx.balanced_tree(r, h))
 
 
 # represents a node including its position in a graph layout
