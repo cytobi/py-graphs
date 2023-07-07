@@ -10,7 +10,7 @@ def main():
     debug("Starting...")
 
     # setup window
-    window = Window("Graph Visualizer", 800, 600)
+    window = Window("Tarvos Graph Visualizer", 800, 600)
 
     # setup graph
     debug("Setting up default graph...")
