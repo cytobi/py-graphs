@@ -17,8 +17,8 @@ def main():
     default_graph = Graph.new_complete_graph(5)
     window.set_current_graph(default_graph)
 
-    # draw graph
-    window.update_graph()
+    # draw graph, properties have already been calculated in init of graph
+    window.update_graph(recalculate_properties=False)
 
     # display window
     window.display()
