@@ -58,18 +58,43 @@ class Graph:
 
     def calculate_properties(self):
         debug("Calculating properties of graph: " + str(self))
+        # precalculate some properties which may be undefined
+        connected = "undefined"
+        try:
+            connected = nx.is_connected(self.nx_graph)
+        except nx.NetworkXPointlessConcept:
+            debug("Graph connectivity is undefined")
+        tree = "undefined"
+        try:
+            tree = nx.is_tree(self.nx_graph)
+        except nx.NetworkXPointlessConcept:
+            debug("Graph treeness is undefined")
+        forest = "undefined"
+        try:
+            forest = nx.is_forest(self.nx_graph)
+        except nx.NetworkXPointlessConcept:
+            debug("Graph forestness is undefined")
+        eulerian = "undefined" # eulerian describes whether a path exists that visits each edge exactly once
+        try:
+            eulerian = nx.is_eulerian(self.nx_graph)
+        except nx.NetworkXPointlessConcept:
+            debug("Graph eulerianness is undefined")
+        if len(self.nx_graph.nodes()) == 0:
+            regular = "undefined"
+        else:
+            regular = nx.is_regular(self.nx_graph)
         self.properties = {"nodes": len(self.nx_graph.nodes()),
                            "edges": len(self.nx_graph.edges()),
                            "density": nx.density(self.nx_graph),
                            "planar": nx.is_planar(self.nx_graph),
                            "empty": nx.is_empty(self.nx_graph),
-                           "connected": nx.is_connected(self.nx_graph),
+                           "connected": connected,
                            "directed": nx.is_directed(self.nx_graph),
                            "bipartite": nx.is_bipartite(self.nx_graph),
-                           "tree": nx.is_tree(self.nx_graph),
-                           "forest": nx.is_forest(self.nx_graph),
-                           "eulerian": nx.is_eulerian(self.nx_graph),
-                           "regular": nx.is_regular(self.nx_graph),
+                           "tree": tree,
+                           "forest": forest,
+                           "eulerian": eulerian,
+                           "regular": regular,
                            }
 
     def draw(self, window):
@@ -80,9 +105,46 @@ class Graph:
             node.draw(window)
         window.update_properties()
 
+    # static methods for creating new graphs
+    @staticmethod
+    def new_null_graph():
+        return Graph(nx.null_graph())
+    
+    @staticmethod
+    def new_trivial_graph():
+        return Graph(nx.trivial_graph())
+    
+    @staticmethod
+    def new_empty_graph(n):
+        return Graph(nx.empty_graph(n))
+    
     @staticmethod
     def new_complete_graph(n):
         return Graph(nx.complete_graph(n))
+    
+    @staticmethod
+    def new_complete_bipartite_graph(n1, n2):
+        return Graph(nx.complete_bipartite_graph(n1, n2))
+    
+    @staticmethod
+    def new_cycle_graph(n):
+        return Graph(nx.cycle_graph(n))
+    
+    @staticmethod
+    def new_path_graph(n):
+        return Graph(nx.path_graph(n))
+    
+    @staticmethod
+    def new_star_graph(n):
+        return Graph(nx.star_graph(n))
+    
+    @staticmethod
+    def  new_full_rary_tree(r, n):
+        return Graph(nx.full_rary_tree(r, n))
+    
+    @staticmethod
+    def new_balanced_tree(r, h):
+        return Graph(nx.balanced_tree(r, h))
 
 
 # represents a node including its position in a graph layout
