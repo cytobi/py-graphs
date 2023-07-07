@@ -1,4 +1,5 @@
 import tkinter as tk # gui library
+import tkinter.simpledialog # for dialogs
 import webbrowser # open links in browser
 import random
 import math
@@ -140,8 +141,11 @@ class Window:
 
     # new graphs
     def new_complete_graph(self):
-        debug("Creating new complete graph...")
-        self.current_graph = Graph.new_complete_graph(random.randint(3, 10))
+        n = tk.simpledialog.askinteger("New Complete Graph", "Enter number of nodes:", parent=self.root)
+        if n is None:
+            return
+        debug("Creating new complete graph with " + str(n) + " nodes")
+        self.current_graph = Graph.new_complete_graph(n)
         self.update_graph()
 
 
