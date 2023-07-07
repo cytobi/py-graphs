@@ -150,6 +150,9 @@ class Window:
         n = tk.simpledialog.askinteger("New Complete Graph", "Enter number of nodes:", parent=self.root)
         if n is None:
             return
+        if n < 1:
+            debug("Invalid number of nodes: " + str(n))
+            return
         debug("Creating new complete graph with " + str(n) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_complete_graph(n)
