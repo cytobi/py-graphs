@@ -22,6 +22,8 @@ class Graph:
         for edge in nx_graph.edges():
             self.edges.append(Edge(self.get_node(edge[0]), self.get_node(edge[1])))
         # properties is a dictionary of properties to display in the sidebar
+        # calculating properties here can result in properties being calculated twice
+        # but not calculating them here results in properties being not initialized until the graph is drawn
         self.calculate_properties()
 
     def get_node(self, name):
