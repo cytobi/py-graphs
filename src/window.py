@@ -73,6 +73,7 @@ class Window:
 
         self.menu.add_cascade(label="New", menu=new_graph_menu)
         self.menu.add_command(label="Reset", command=self.reset_graph)
+        self.menu.add_command(label="Planarize", command=self.planrize_graph)
         self.menu.add_command(label="Algorithm", command=self.run_algorithm)
         self.menu.add_command(label="Step", command=self.step_algorithm)
         self.menu.add_command(label="About", command=self.about)
@@ -127,6 +128,10 @@ class Window:
         debug("Resetting graph: " + str(self.current_graph))
         self.zoom = 1 # reset zoom
         self.current_graph.spring_layout()
+        self.update_graph()
+
+    def planrize_graph(self):
+        self.current_graph.planar_layout()
         self.update_graph()
 
     # all things that need to be cleaned up when a new graph is created

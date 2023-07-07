@@ -22,6 +22,8 @@ class Graph:
         for edge in nx_graph.edges():
             self.edges.append(Edge(self.get_node(edge[0]), self.get_node(edge[1])))
         # properties is a dictionary of properties to display in the sidebar
+        # calculating properties here can result in properties being calculated twice
+        # but not calculating them here results in properties being not initialized until the graph is drawn
         self.calculate_properties()
 
     def get_node(self, name):
@@ -48,10 +50,21 @@ class Graph:
     def add_edge(self, node1, node2, weight=None, color="black", directed=False):
         self.nx_graph.add_edge(node1.name, node2.name)
         self.edges.append(Edge(node1, node2, weight, color, directed))
-    
+
     # creates a new spring layout for this graph
     def spring_layout(self):
         pos = nx.spring_layout(self.nx_graph)
+        for node in self.nodes:
+            node.x = pos[node.name][0]
+            node.y = pos[node.name][1]
+
+    def planar_layout(self):
+        debug("Attempting to create planar layout for graph: " + str(self))
+        try:
+            pos = nx.planar_layout(self.nx_graph)
+        except nx.NetworkXException:
+            debug("Planar layout failed, is the graph planar?")
+            return
         for node in self.nodes:
             node.x = pos[node.name][0]
             node.y = pos[node.name][1]
