@@ -244,7 +244,7 @@ class Window:
         self.update_graph()
 
     def new_full_rary_tree(self):
-        n = tk.simpledialog.askinteger("New Full r-ary Tree", "Enter number of nodes:", parent=self.root)
+        n = tk.simpledialog.askinteger("New Full r-ary Tree", "Enter total number of nodes:", parent=self.root)
         if n is None:
             return
         if n < 1:
