@@ -120,6 +120,12 @@ class Window:
         self.current_graph.spring_layout()
         self.update_graph()
 
+    # all things that need to be cleaned up when a new graph is created
+    def clean_up_old_graph(self):
+        if self.current_algorithm is not None:
+            self.current_algorithm.kill()
+
+
     def update_properties(self):
         debug("Updating properties in sidebar...")
         properties = self.current_graph.properties
@@ -145,6 +151,7 @@ class Window:
         if n is None:
             return
         debug("Creating new complete graph with " + str(n) + " nodes")
+        self.clean_up_old_graph()
         self.current_graph = Graph.new_complete_graph(n)
         self.update_graph()
 
