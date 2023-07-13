@@ -275,22 +275,6 @@ class Window:
         self.clean_up_old_graph()
         self.current_graph = Graph.new_balanced_tree(input["r"], input["h"])
         self.update_graph(recalculate_properties=False)
-
-    # values is dict: {"key/parametername": ("description", min_value)}
-    # e.g. values={"n": ("number of nodes", 1), "r": ("number of children per node", 0)}
-    # returns None or dict: {"key/parametername": value}
-    def ask_input(self, title, values):
-        for key in values:
-            description = values[key][0]
-            min_value = values[key][1]
-            value = tk.simpledialog.askinteger(title, "Enter " + description + ":", parent=self.root)
-            if value is None:
-                return None
-            if value < min_value:
-                debug("Invalid " + description + ": " + str(value))
-                return None
-            values[key] = value
-        return values
     
 
     # algorithms
@@ -357,3 +341,20 @@ class Window:
         else:
             canvas.create_line(width/2, 0, width/2, height)
             canvas.pack(side=tk.RIGHT, fill=tk.BOTH)
+
+    # helper thtat asks for inputs in dictionary using dialog boxes, useful for graph creation
+    # values is dict: {"key/parametername": ("description", min_value)}
+    # e.g. values={"n": ("number of nodes", 1), "r": ("number of children per node", 0)}
+    # returns None or dict: {"key/parametername": value}
+    def ask_input(self, title, values):
+        for key in values:
+            description = values[key][0]
+            min_value = values[key][1]
+            value = tk.simpledialog.askinteger(title, "Enter " + description + ":", parent=self.root)
+            if value is None:
+                return None
+            if value < min_value:
+                debug("Invalid " + description + ": " + str(value))
+                return None
+            values[key] = value
+        return values
