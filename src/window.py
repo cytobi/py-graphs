@@ -268,23 +268,30 @@ class Window:
         self.update_graph(recalculate_properties=False)
 
     def new_rary_balanced_tree(self):
-        h = tk.simpledialog.askinteger("New Balanced Tree", "Enter height:", parent=self.root)
-        if h is None:
+        input = self.ask_input("New Balanced Tree", {"h": ("height", 1), "r": ("number of children per node", 1)})
+        if input is None:
             return
-        if h < 1:
-            debug("Invalid number for height: " + str(h))
-            return
-        r = tk.simpledialog.askinteger("New Balanced Tree", "Enter number of children per node:", parent=self.root)
-        if r is None:
-            return
-        if r < 1:
-            debug("Invalid number of children per node: " + str(r))
-            return
-        debug("Creating new balanced tree with " + str(r) + " nodes")
+        debug("Creating new balanced tree with " + str(input["r"]) + " nodes")
         self.clean_up_old_graph()
-        self.current_graph = Graph.new_balanced_tree(r, h)
+        self.current_graph = Graph.new_balanced_tree(input["r"], input["h"])
         self.update_graph(recalculate_properties=False)
 
+    # values is dict: {"key/parametername": ("description", min_value)}
+    # e.g. values={"n": ("number of nodes", 1), "r": ("number of children per node", 0)}
+    # returns None or dict: {"key/parametername": value}
+    def ask_input(self, title, values):
+        for key in values:
+            description = values[key][0]
+            min_value = values[key][1]
+            value = tk.simpledialog.askinteger(title, "Enter " + description + ":", parent=self.root)
+            if value is None:
+                return None
+            if value < min_value:
+                debug("Invalid " + description + ": " + str(value))
+                return None
+            values[key] = value
+        return values
+    
 
     # algorithms
     def run_algorithm(self):
