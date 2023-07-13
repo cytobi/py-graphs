@@ -172,119 +172,88 @@ class Window:
         self.update_graph(recalculate_properties=False)
 
     def new_empty_graph(self):
-        n = tk.simpledialog.askinteger("New Empty Graph", "Enter number of nodes:", parent=self.root)
-        if n is None:
+        input = self.ask_input("New Empty Graph", {"n": ("number of nodes", 1)})
+        if input is None:
             return
-        if n < 1:
-            debug("Invalid number of nodes: " + str(n))
-            return
+        n = input["n"]
         debug("Creating new empty graph with " + str(n) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_empty_graph(n)
         self.update_graph(recalculate_properties=False)
 
     def new_complete_graph(self):
-        n = tk.simpledialog.askinteger("New Complete Graph", "Enter number of nodes:", parent=self.root)
-        if n is None:
+        input = self.ask_input("New Complete Graph", {"n": ("number of nodes", 1)})
+        if input is None:
             return
-        if n < 1:
-            debug("Invalid number of nodes: " + str(n))
-            return
+        n = input["n"]
         debug("Creating new complete graph with " + str(n) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_complete_graph(n)
         self.update_graph(recalculate_properties=False)
 
     def new_complete_bipartite_graph(self):
-        n1 = tk.simpledialog.askinteger("New Complete Bipartite Graph", "Enter number of nodes in first part:", parent=self.root)
-        if n1 is None:
+        input = self.ask_input("New Complete Bipartite Graph", {"n1": ("number of nodes in first part", 1), "n2": ("number of nodes in second part", 1)})
+        if input is None:
             return
-        if n1 < 1:
-            debug("Invalid number of nodes: " + str(n1))
-            return
-        n2 = tk.simpledialog.askinteger("New Complete Bipartite Graph", "Enter number of nodes in second part:", parent=self.root)
-        if n2 is None:
-            return
-        if n2 < 1:
-            debug("Invalid number of nodes: " + str(n2))
-            return
+        n1 = input["n1"]
+        n2 = input["n2"]
         debug("Creating new complete bipartite graph with " + str(n1) + " nodes in first part and " + str(n2) + " nodes in second part")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_complete_bipartite_graph(n1, n2)
         self.update_graph(recalculate_properties=False)
 
     def new_cycle_graph(self):
-        n = tk.simpledialog.askinteger("New Cycle Graph", "Enter number of nodes:", parent=self.root)
-        if n is None:
+        input = self.ask_input("New Cycle Graph", {"n": ("number of nodes", 3)})
+        if input is None:
             return
-        if n < 3:
-            debug("Invalid number of nodes: " + str(n))
-            return
+        n = input["n"]
         debug("Creating new cycle graph with " + str(n) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_cycle_graph(n)
         self.update_graph(recalculate_properties=False)
 
     def new_path_graph(self):
-        n = tk.simpledialog.askinteger("New Path Graph", "Enter number of nodes:", parent=self.root)
-        if n is None:
+        input = self.ask_input("New Path Graph", {"n": ("number of nodes", 1)})
+        if input is None:
             return
-        if n < 1:
-            debug("Invalid number of nodes: " + str(n))
-            return
+        n = input["n"]
         debug("Creating new path graph with " + str(n) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_path_graph(n)
         self.update_graph(recalculate_properties=False)
 
     def new_star_graph(self):
-        n = tk.simpledialog.askinteger("New Star Graph", "Enter number of arms:", parent=self.root)
-        if n is None:
+        input = self.ask_input("New Star Graph", {"n": ("number of nodes", 0)})
+        if input is None:
             return
-        if n < 0:
-            debug("Invalid number of nodes: " + str(n))
-            return
+        n = input["n"]
         debug("Creating new star graph with " + str(n) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_star_graph(n)
         self.update_graph(recalculate_properties=False)
 
     def new_full_rary_tree(self):
-        n = tk.simpledialog.askinteger("New Full r-ary Tree", "Enter total number of nodes:", parent=self.root)
-        if n is None:
+        input = self.ask_input("New Full r-ary Tree", {"n": ("number of nodes", 1), "r": ("number of children per node", 1)})
+        if input is None:
             return
-        if n < 1:
-            debug("Invalid number of nodes: " + str(n))
-            return
-        r = tk.simpledialog.askinteger("New Full r-ary Tree", "Enter number of children per node:", parent=self.root)
-        if r is None:
-            return
-        if r < 1:
-            debug("Invalid number of children per node: " + str(r))
-            return
+        n = input["n"]
+        r = input["r"]
         debug("Creating new full r-ary tree with " + str(n) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_full_rary_tree(r, n)
         self.update_graph(recalculate_properties=False)
 
     def new_rary_balanced_tree(self):
-        h = tk.simpledialog.askinteger("New Balanced Tree", "Enter height:", parent=self.root)
-        if h is None:
+        input = self.ask_input("New Balanced Tree", {"h": ("height", 1), "r": ("number of children per node", 1)})
+        if input is None:
             return
-        if h < 1:
-            debug("Invalid number for height: " + str(h))
-            return
-        r = tk.simpledialog.askinteger("New Balanced Tree", "Enter number of children per node:", parent=self.root)
-        if r is None:
-            return
-        if r < 1:
-            debug("Invalid number of children per node: " + str(r))
-            return
-        debug("Creating new balanced tree with " + str(r) + " nodes")
+        h = input["h"]
+        r = input["r"]
+        debug("Creating new balanced tree with " + str(h) + " nodes")
         self.clean_up_old_graph()
         self.current_graph = Graph.new_balanced_tree(r, h)
         self.update_graph(recalculate_properties=False)
-
+    
 
     # algorithms
     def run_algorithm(self):
@@ -350,3 +319,23 @@ class Window:
         else:
             canvas.create_line(width/2, 0, width/2, height)
             canvas.pack(side=tk.RIGHT, fill=tk.BOTH)
+
+    # helper thtat asks for inputs in dictionary using dialog boxes, useful for graph creation
+    # values is dict: {"key/parametername": ("description", min_value)}
+    # e.g. values={"n": ("number of nodes", 1), "r": ("number of children per node", 0)}
+    # returns None or dict: {"key/parametername": value}
+    def ask_input(self, title, values):
+        for key in values:
+            description = values[key][0]
+            min_value = values[key][1]
+            while True:
+                value = tk.simpledialog.askinteger(title, "Enter " + description + ":", parent=self.root)
+                if value is None:
+                    return None
+                if value < min_value:
+                    debug("Invalid " + description + ": " + str(value))
+                    continue
+                else:
+                    break
+            values[key] = value
+        return values
