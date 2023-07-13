@@ -328,11 +328,14 @@ class Window:
         for key in values:
             description = values[key][0]
             min_value = values[key][1]
-            value = tk.simpledialog.askinteger(title, "Enter " + description + ":", parent=self.root)
-            if value is None:
-                return None
-            if value < min_value:
-                debug("Invalid " + description + ": " + str(value))
-                return None
+            while True:
+                value = tk.simpledialog.askinteger(title, "Enter " + description + ":", parent=self.root)
+                if value is None:
+                    return None
+                if value < min_value:
+                    debug("Invalid " + description + ": " + str(value))
+                    continue
+                else:
+                    break
             values[key] = value
         return values
